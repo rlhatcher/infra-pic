@@ -55,7 +55,9 @@ class TestRender:
             groups=[GroupDef(name="VPC", services=["web", "db"])]
         )
         render(diagram, "/tmp/test.png")
-        mock_cluster.assert_called_once_with("VPC")
+        mock_cluster.assert_called_once_with(
+            "VPC", graph_attr={"fontname": "Inter bold", "fontsize": "12"}
+        )
 
     def test_render_with_connections(self, mock_check, mock_diagram, mock_validate):
         mock_cls = MagicMock(side_effect=_mock_node_class)

@@ -25,6 +25,9 @@ def render(diagram_def: DiagramDef, output: str) -> str:
             outformat="png",
             show=False,
             direction="TB",
+            graph_attr={"fontname": "Inter", "fontsize": "12"},
+            node_attr={"fontname": "Inter", "fontsize": "12"},
+            edge_attr={"fontname": "Inter", "fontsize": "12"},
         ):
             # Render groups (clusters) and their services
             grouped_ids: set[str] = set()
@@ -63,7 +66,7 @@ def _render_groups(
 ) -> None:
     """Recursively render groups as Clusters, instantiating nodes inside them."""
     for group in groups:
-        with Cluster(group.name):
+        with Cluster(group.name, graph_attr={"fontname": "Inter bold", "fontsize": "12"}):
             for sid in group.services:
                 cls = type_map[sid]
                 nodes[sid] = cls(diagram_def.services[sid].label)
