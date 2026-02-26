@@ -1,0 +1,60 @@
+diagram:
+  name: "Data Analytics Pipeline"
+
+  services:
+    stream:
+      type: analytics.KinesisDataStreams
+      label: "Event Stream"
+    firehose:
+      type: analytics.KinesisDataFirehose
+      label: "Delivery Stream"
+    raw_bucket:
+      type: storage.S3
+      label: "Raw Data Lake"
+    glue:
+      type: analytics.Glue
+      label: "ETL Jobs"
+    catalog:
+      type: analytics.GlueDataCatalog
+      label: "Data Catalog"
+    processed_bucket:
+      type: storage.S3
+      label: "Processed Data"
+    athena:
+      type: analytics.Athena
+      label: "Ad-hoc Queries"
+    redshift:
+      type: database.Redshift
+      label: "Data Warehouse"
+    quicksight:
+      type: analytics.Quicksight
+      label: "Dashboards"
+
+  groups:
+    - name: "AWS Cloud"
+      children:
+        - name: "Ingestion"
+          services: [stream, firehose]
+        - name: "Storage"
+          services: [raw_bucket, processed_bucket]
+        - name: "Processing"
+          services: [glue, catalog]
+        - name: "Analytics"
+          services: [athena, redshift, quicksight]
+
+  connections:
+    - from: stream
+      to: firehose
+      label: "raw events"
+    - from: firehose
+      to: raw_bucket
+    - from: raw_bucket
+      to: glue
+    - from: glue
+      to: [catalog, processed_bucket]
+    - from: processed_bucket
+      to: [athena, redshift]
+    - from: redshift
+      to: quicksight
+    - from: athena
+      to: quicksight

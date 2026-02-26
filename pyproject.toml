@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "awsdiagram"
+version = "0.1.0"
+description = "Generate AWS architecture diagrams from YAML definitions"
+requires-python = ">=3.10"
+dependencies = [
+    "click>=8.1",
+    "pyyaml>=6.0",
+    "pydantic>=2.0",
+    "diagrams>=0.24",
+]
+
+[project.scripts]
+awsdiagram = "awsdiagram.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0"]

@@ -1,0 +1,120 @@
+{
+  "format_version": "1.2",
+  "terraform_version": "1.7.0",
+  "planned_values": {
+    "root_module": {
+      "resources": [
+        {
+          "address": "aws_vpc.main",
+          "type": "aws_vpc",
+          "name": "main",
+          "values": {
+            "cidr_block": "10.0.0.0/16",
+            "tags": { "Name": "Main VPC" }
+          }
+        },
+        {
+          "address": "aws_subnet.public",
+          "type": "aws_subnet",
+          "name": "public",
+          "values": {
+            "cidr_block": "10.0.1.0/24",
+            "vpc_id": "vpc-0abc123def456",
+            "tags": { "Name": "Public Subnet" }
+          }
+        },
+        {
+          "address": "aws_internet_gateway.gw",
+          "type": "aws_internet_gateway",
+          "name": "gw",
+          "values": {
+            "vpc_id": "vpc-0abc123def456",
+            "tags": { "Name": "Internet Gateway" }
+          }
+        },
+        {
+          "address": "aws_lb.web",
+          "type": "aws_lb",
+          "name": "web",
+          "values": {
+            "subnet_id": "subnet-0abc123",
+            "tags": { "Name": "Web ALB" }
+          }
+        },
+        {
+          "address": "aws_instance.web_server",
+          "type": "aws_instance",
+          "name": "web_server",
+          "values": {
+            "instance_type": "t3.medium",
+            "subnet_id": "subnet-0abc123",
+            "tags": { "Name": "Web Server" }
+          }
+        },
+        {
+          "address": "aws_db_instance.postgres",
+          "type": "aws_db_instance",
+          "name": "postgres",
+          "values": {
+            "engine": "postgres",
+            "instance_class": "db.t3.medium",
+            "subnet_id": "subnet-0def456",
+            "tags": { "Name": "PostgreSQL" }
+          }
+        },
+        {
+          "address": "aws_s3_bucket.assets",
+          "type": "aws_s3_bucket",
+          "name": "assets",
+          "values": {
+            "bucket": "my-app-assets",
+            "tags": { "Name": "Static Assets" }
+          }
+        },
+        {
+          "address": "aws_lambda_function.processor",
+          "type": "aws_lambda_function",
+          "name": "processor",
+          "values": {
+            "function_name": "data-processor",
+            "runtime": "python3.11",
+            "tags": { "Name": "Data Processor" }
+          }
+        },
+        {
+          "address": "aws_sqs_queue.tasks",
+          "type": "aws_sqs_queue",
+          "name": "tasks",
+          "values": {
+            "name": "task-queue",
+            "tags": { "Name": "Task Queue" }
+          }
+        },
+        {
+          "address": "aws_cloudfront_distribution.cdn",
+          "type": "aws_cloudfront_distribution",
+          "name": "cdn",
+          "values": {
+            "tags": { "Name": "CDN Distribution" }
+          }
+        }
+      ],
+      "child_modules": [
+        {
+          "address": "module.monitoring",
+          "resources": [
+            {
+              "address": "module.monitoring.aws_cloudwatch_log_group.logs",
+              "type": "aws_cloudwatch_log_group",
+              "name": "logs",
+              "values": {
+                "name": "/app/logs",
+                "tags": { "Name": "App Logs" }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

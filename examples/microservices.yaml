@@ -1,0 +1,54 @@
+diagram:
+  name: "Microservices Platform"
+
+  services:
+    cdn:
+      type: network.CloudFront
+      label: "CDN"
+    alb:
+      type: network.ELB
+      label: "Application LB"
+    api:
+      type: compute.ECS
+      label: "API Service"
+    worker:
+      type: compute.ECS
+      label: "Worker Service"
+    queue:
+      type: integration.SQS
+      label: "Task Queue"
+    notifications:
+      type: integration.SNS
+      label: "Notifications"
+    db:
+      type: database.Aurora
+      label: "Aurora DB"
+    cache:
+      type: database.ElastiCache
+      label: "Redis Cache"
+
+  groups:
+    - name: "AWS Cloud"
+      children:
+        - name: "Edge"
+          services: [cdn]
+        - name: "VPC"
+          children:
+            - name: "Public Subnet"
+              services: [alb]
+            - name: "Private Subnet"
+              services: [api, worker, db, cache]
+        - name: "Messaging"
+          services: [queue, notifications]
+
+  connections:
+    - from: cdn
+      to: alb
+    - from: alb
+      to: api
+    - from: api
+      to: [db, cache, queue]
+    - from: queue
+      to: worker
+    - from: worker
+      to: [db, notifications]
